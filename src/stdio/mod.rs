@@ -219,7 +219,7 @@ impl WriteByte for FILE {
     }
 }
 impl FILE {
-    pub fn lock(&mut self) -> LockGuard {
+    pub fn lock(&mut self) -> LockGuard<'_> {
         unsafe {
             flockfile(self);
         }
@@ -768,7 +768,7 @@ pub unsafe extern "C" fn fprintf(
     format: *const c_char,
     mut __valist: ...
 ) -> c_int {
-    vfprintf(file, format, __valist.as_va_list())
+    vfprintf(file, format, __valist)
 }
 
 #[no_mangle]
@@ -778,7 +778,7 @@ pub unsafe extern "C" fn vprintf(format: *const c_char, ap: va_list) -> c_int {
 
 #[no_mangle]
 pub unsafe extern "C" fn printf(format: *const c_char, mut __valist: ...) -> c_int {
-    vfprintf(&mut *stdout, format, __valist.as_va_list())
+    vfprintf(&mut *stdout, format, __valist)
 }
 
 #[no_mangle]
@@ -801,7 +801,7 @@ pub unsafe extern "C" fn snprintf(
     printf::printf(
         &mut StringWriter(s as *mut u8, n),
         format,
-        __valist.as_va_list(),
+        __valist,
     )
 }
 
@@ -818,7 +818,7 @@ pub unsafe extern "C" fn sprintf(
     printf::printf(
         &mut UnsafeStringWriter(s as *mut u8),
         format,
-        __valist.as_va_list(),
+        __valist,
     )
 }
 
@@ -843,7 +843,7 @@ pub unsafe extern "C" fn fscanf(
     format: *const c_char,
     mut __valist: ...
 ) -> c_int {
-    vfscanf(file, format, __valist.as_va_list())
+    vfscanf(file, format, __valist)
 }
 
 #[no_mangle]
@@ -852,7 +852,7 @@ pub unsafe extern "C" fn vscanf(format: *const c_char, ap: va_list) -> c_int {
 }
 #[no_mangle]
 pub unsafe extern "C" fn scanf(format: *const c_char, mut __valist: ...) -> c_int {
-    vfscanf(&mut *stdin, format, __valist.as_va_list())
+    vfscanf(&mut *stdin, format, __valist)
 }
 
 #[no_mangle]
@@ -867,7 +867,7 @@ pub unsafe extern "C" fn sscanf(
     mut __valist: ...
 ) -> c_int {
     let reader = (s as *const u8).into();
-    scanf::scanf(reader, format, __valist.as_va_list())
+    scanf::scanf(reader, format, __valist)
 }
 
 pub fn init() {

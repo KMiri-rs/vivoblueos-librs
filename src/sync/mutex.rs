@@ -82,7 +82,6 @@ impl Mutex {
                 PTHREAD_MUTEX_DEFAULT => Ty::Def,
                 PTHREAD_MUTEX_ERRORCHECK => Ty::Errck,
                 PTHREAD_MUTEX_RECURSIVE => Ty::Recursive,
-                PTHREAD_MUTEX_NORMAL => Ty::Normal,
                 _ => return Err(EINVAL),
             },
         })

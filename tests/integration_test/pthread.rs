@@ -18,8 +18,7 @@ use blueos_test_macro::{only_test, test};
 use core::{
     cell::{Cell, RefCell},
     ffi::c_void,
-    intrinsics::transmute,
-    mem::{align_of, size_of, MaybeUninit},
+    mem::{align_of, size_of, transmute, MaybeUninit},
     sync::atomic::{AtomicI8, AtomicUsize, Ordering},
 };
 use libc::{

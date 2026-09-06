@@ -125,9 +125,9 @@ impl VaArg {
 
             (FmtKind::Char, _)
             | (FmtKind::Unsigned, IntKind::Byte)
-            | (FmtKind::Signed, IntKind::Byte) => VaArg::c_char(ap.arg::<c_char>()),
+            | (FmtKind::Signed, IntKind::Byte) => VaArg::c_char(ap.arg::<c_int>() as c_char),
             (FmtKind::Unsigned, IntKind::Short) | (FmtKind::Signed, IntKind::Short) => {
-                VaArg::c_short(ap.arg::<c_short>())
+                VaArg::c_short(ap.arg::<c_int>() as c_short)
             }
             (FmtKind::Unsigned, IntKind::Int) | (FmtKind::Signed, IntKind::Int) => {
                 VaArg::c_int(ap.arg::<c_int>())
