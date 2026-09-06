@@ -38,7 +38,7 @@ use core::{
     alloc::Layout,
     cell::SyncUnsafeCell,
     ffi::{c_int, c_size_t, c_uint, c_void},
-    intrinsics::transmute,
+    mem::transmute,
     num::{NonZero, NonZeroU32},
     sync::atomic::{AtomicBool, AtomicI32, AtomicI8, AtomicUsize, Ordering},
 };
