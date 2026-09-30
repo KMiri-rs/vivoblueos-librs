@@ -254,7 +254,7 @@ unsafe fn inner_scanf(
                                 n.parse::<$type>().map_err(|_| 0)?
                             };
                             if !ignore {
-                                *ap.arg::<*mut $type>() = n;
+                                *ap.next_arg::<*mut $type>() = n;
                                 matched += 1;
                             }
                         }};
@@ -274,7 +274,7 @@ unsafe fn inner_scanf(
                                 $type::from_str_radix(&n, radix).map_err(|_| 0)?
                             };
                             if !ignore {
-                                *ap.arg::<*mut $final>() = n as $final;
+                                *ap.next_arg::<*mut $final>() = n as $final;
                                 matched += 1;
                             }
                         }};
@@ -455,7 +455,7 @@ unsafe fn inner_scanf(
                 }
                 b'n' => {
                     if !ignore {
-                        *ap.arg::<*mut c_int>() = count as c_int;
+                        *ap.next_arg::<*mut c_int>() = count as c_int;
                     }
                 }
                 _ => return Err(-1),
