@@ -120,40 +120,40 @@ impl VaArg {
             (FmtKind::Percent, _) => panic!("Can't call arg_from on %"),
 
             (FmtKind::Char, IntKind::Long) | (FmtKind::Char, IntKind::LongLong) => {
-                VaArg::wint_t(ap.arg::<c_longlong>())
+                VaArg::wint_t(ap.next_arg::<c_longlong>())
             }
 
             (FmtKind::Char, _)
             | (FmtKind::Unsigned, IntKind::Byte)
-            | (FmtKind::Signed, IntKind::Byte) => VaArg::c_char(ap.arg::<c_char>()),
+            | (FmtKind::Signed, IntKind::Byte) => VaArg::c_char(ap.next_arg::<c_char>()),
             (FmtKind::Unsigned, IntKind::Short) | (FmtKind::Signed, IntKind::Short) => {
-                VaArg::c_short(ap.arg::<c_short>())
+                VaArg::c_short(ap.next_arg::<c_short>())
             }
             (FmtKind::Unsigned, IntKind::Int) | (FmtKind::Signed, IntKind::Int) => {
-                VaArg::c_int(ap.arg::<c_int>())
+                VaArg::c_int(ap.next_arg::<c_int>())
             }
             (FmtKind::Unsigned, IntKind::Long) | (FmtKind::Signed, IntKind::Long) => {
-                VaArg::c_long(ap.arg::<c_long>())
+                VaArg::c_long(ap.next_arg::<c_long>())
             }
             (FmtKind::Unsigned, IntKind::LongLong) | (FmtKind::Signed, IntKind::LongLong) => {
-                VaArg::c_longlong(ap.arg::<c_longlong>())
+                VaArg::c_longlong(ap.next_arg::<c_longlong>())
             }
             (FmtKind::Unsigned, IntKind::IntMax) | (FmtKind::Signed, IntKind::IntMax) => {
-                VaArg::intmax_t(ap.arg::<intmax_t>())
+                VaArg::intmax_t(ap.next_arg::<intmax_t>())
             }
             (FmtKind::Unsigned, IntKind::PtrDiff) | (FmtKind::Signed, IntKind::PtrDiff) => {
-                VaArg::ptrdiff_t(ap.arg::<ptrdiff_t>())
+                VaArg::ptrdiff_t(ap.next_arg::<ptrdiff_t>())
             }
             (FmtKind::Unsigned, IntKind::Size) | (FmtKind::Signed, IntKind::Size) => {
-                VaArg::ssize_t(ap.arg::<ssize_t>())
+                VaArg::ssize_t(ap.next_arg::<ssize_t>())
             }
 
             (FmtKind::AnyNotation, _) | (FmtKind::Decimal, _) | (FmtKind::Scientific, _) => {
-                VaArg::c_double(ap.arg::<c_double>())
+                VaArg::c_double(ap.next_arg::<c_double>())
             }
 
             (FmtKind::GetWritten, _) | (FmtKind::Pointer, _) | (FmtKind::String, _) => {
-                VaArg::pointer(ap.arg::<*const c_void>())
+                VaArg::pointer(ap.next_arg::<*const c_void>())
             }
         }
     }
@@ -276,13 +276,13 @@ impl VaListCache {
             // point. Reaching here means there are unused gaps in the
             // arguments. Ultimately we'll have to settle down with
             // defaulting to c_int.
-            self.args.push(VaArg::c_int(ap.arg::<c_int>()))
+            self.args.push(VaArg::c_int(ap.next_arg::<c_int>()))
         }
 
         // Add the value to the cache
         self.args.push(match default {
             Some((fmtkind, intkind)) => VaArg::arg_from(fmtkind, intkind, ap),
-            None => VaArg::c_int(ap.arg::<c_int>()),
+            None => VaArg::c_int(ap.next_arg::<c_int>()),
         });
 
         // Return the value
@@ -656,7 +656,7 @@ unsafe fn inner_printf<W: Write>(w: W, format: *const c_char, mut ap: VaList) ->
             match num {
                 Number::Next => {
                     uses_sequential = true;
-                    varargs.args.push(VaArg::c_int(ap.arg::<c_int>()));
+                    varargs.args.push(VaArg::c_int(ap.next_arg::<c_int>()));
                 }
                 Number::Index(i) => {
                     uses_positional = true;
