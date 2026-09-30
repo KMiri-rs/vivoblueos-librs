@@ -40,7 +40,7 @@ pub unsafe extern "C" fn fcntl(fildes: c_int, cmd: c_int, mut __valist: ...) -> 
     // c_ulonglong
     let arg = match cmd {
         F_DUPFD | F_SETFD | F_SETFL | F_SETLK | F_SETLKW | F_GETLK => unsafe {
-            __valist.arg::<c_ulonglong>()
+            __valist.next_arg::<c_ulonglong>()
         },
         _ => 0,
     };
@@ -58,7 +58,7 @@ pub unsafe extern "C" fn open(path: *const c_char, oflag: c_int, mut __valist: .
         // We assume that the caller has passed a valid mode_t value.
         // The actual value of mode is extracted from the variadic arguments.
 
-        unsafe { __valist.arg::<mode_t>() }
+        unsafe { __valist.next_arg::<mode_t>() }
     } else {
         0
     };
