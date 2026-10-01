@@ -24,8 +24,6 @@
 #![feature(linkage)]
 #![feature(lang_items)]
 #![feature(thread_local)]
-#![feature(box_as_ptr)]
-#![feature(atomic_from_mut)]
 #![feature(c_variadic)]
 #![feature(array_ptr_get)]
 #![feature(sync_unsafe_cell)]

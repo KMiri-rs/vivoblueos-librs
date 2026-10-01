@@ -352,7 +352,8 @@ unsafe fn inner_scanf(
                         }
                     }
 
-                    let mut ptr: Option<*mut c_char> = if ignore { None } else { Some(ap.arg()) };
+                    let mut ptr: Option<*mut c_char> =
+                        if ignore { None } else { Some(ap.next_arg()) };
 
                     while width.map(|w| w > 0).unwrap_or(true) && !(byte as char).is_whitespace() {
                         if let Some(ref mut ptr) = ptr {
@@ -373,7 +374,7 @@ unsafe fn inner_scanf(
                     }
                 }
                 b'c' => {
-                    let ptr: Option<*mut c_char> = if ignore { None } else { Some(ap.arg()) };
+                    let ptr: Option<*mut c_char> = if ignore { None } else { Some(ap.next_arg()) };
 
                     for i in 0..width.unwrap_or(1) {
                         if let Some(ptr) = ptr {
@@ -426,7 +427,8 @@ unsafe fn inner_scanf(
                         }
                     }
 
-                    let mut ptr: Option<*mut c_char> = if ignore { None } else { Some(ap.arg()) };
+                    let mut ptr: Option<*mut c_char> =
+                        if ignore { None } else { Some(ap.next_arg()) };
 
                     // While we haven't used up all the width, and it matches
                     let mut data_stored = false;
