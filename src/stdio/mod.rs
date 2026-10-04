@@ -219,7 +219,7 @@ impl WriteByte for FILE {
     }
 }
 impl FILE {
-    pub fn lock(&mut self) -> LockGuard {
+    pub fn lock(&mut self) -> LockGuard<'_> {
         unsafe {
             flockfile(self);
         }
@@ -798,11 +798,7 @@ pub unsafe extern "C" fn snprintf(
     format: *const c_char,
     mut __valist: ...
 ) -> c_int {
-    printf::printf(
-        &mut StringWriter(s as *mut u8, n),
-        format,
-        __valist.clone(),
-    )
+    printf::printf(&mut StringWriter(s as *mut u8, n), format, __valist.clone())
 }
 
 #[no_mangle]
